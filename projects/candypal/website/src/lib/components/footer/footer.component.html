@@ -1,0 +1,93 @@
+<footer class="page-footer stylish-color-dark" [ngStyle]="footer?.style">
+
+  <div class="container">
+
+    <div *ngIf="footer?.displayTopSection" class="row text-center text-md-left mt-3 pb-3">
+
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h6 class="title mb-4 font-bold">{{footer?.message?.heading}}</h6>
+        <p>{{footer?.message?.desc}}</p>
+      </div>
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h6 class="title mb-4 font-bold">More...</h6>
+        <p *ngFor="let link of footer?.columnOneLinks" [hidden]="link.hidden"><a [routerLink]="link.url">{{link.label}}</a></p>
+      </div>
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h6 class="title mb-4 font-bold">Useful links</h6>
+        <p *ngFor="let link of footer?.columnTwoLinks" [hidden]="link.hidden"><a [routerLink]="link.url">{{link.label}}</a></p>
+      </div>
+
+      <hr class="w-100 clearfix d-md-none">
+
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+        <h6 class="title mb-4 font-bold">Contact</h6>
+        <p>
+          <fa-icon [icon]="faHome"></fa-icon>&nbsp;{{footer?.contact?.name}}
+        </p>
+        <p>
+          <fa-icon [icon]="faEnvelope"></fa-icon>&nbsp;{{footer?.contact?.email}}
+        </p>
+        <p>
+          <fa-icon [icon]="faPhone"></fa-icon>&nbsp;{{footer?.contact?.phone}}
+        </p>
+        <p>
+          <fa-icon [icon]="faFax"></fa-icon>&nbsp;{{footer?.contact?.fax}}
+        </p>
+      </div>
+
+    </div>
+
+    <hr *ngIf="footer?.displayTopSection">
+
+    <div class="row py-3 d-flex align-items-center">
+
+      <div class="col-md-8 col-lg-9">
+        <p class="text-center text-md-left grey-text">
+          © {{footer?.copyright?.year}} Copyright:
+          <a href="{{footer?.copyright?.url}}"><strong>{{footer?.copyright?.label}}</strong></a>
+        </p>
+      </div>
+
+      <div class="col-md-4 col-lg-3 ml-lg-0">
+
+        <div class="social-section text-center text-md-left">
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mr-xl-4" target="_blank"
+                 href="{{footer?.social?.facebook}}">
+                <fa-icon [icon]="faFacebook"></fa-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mr-xl-4" target="_blank" href="{{footer?.social?.twitter}}">
+                <fa-icon [icon]="faTwitter"></fa-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mr-xl-4" target="_blank"
+                 href="{{footer?.social?.googlePlus}}">
+                <fa-icon [icon]="faGooglePlus"></fa-icon>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn-floating btn-sm rgba-white-slight mr-xl-4" target="_blank"
+                 href="{{footer?.social?.linkedIn}}">
+                <fa-icon [icon]="faLinkedi"></fa-icon>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>

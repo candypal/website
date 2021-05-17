@@ -1,0 +1,20 @@
+$a-tags: 'a, a:active, a:hover, a:visited';
+$a-tags-hover: 'a:active, a:hover';
+
+.page-footer {
+  background-color: #9d8986;
+}
+
+footer.page-footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  color: #fff;
+}
+
+#{$a-tags} {
+  color: #ffbc31;
+  text-decoration: none;
+}
+#{$a-tags-hover} {
+  color: #ff8219;
+}

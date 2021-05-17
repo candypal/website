@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "eb4956f4-4c1c-4ad4-b5be-8f3b717f96ba"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -31,6 +34,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/scss/bootstrap.scss",
               "src/styles.scss"
             ],
             "scripts": []
@@ -102,6 +106,37 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        }
+      }
+    },
+    "@candypal/website": {
+      "projectType": "library",
+      "root": "projects/candypal/website",
+      "sourceRoot": "projects/candypal/website/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/candypal/website/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/candypal/website/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/candypal/website/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/candypal/website/src/test.ts",
+            "tsConfig": "projects/candypal/website/tsconfig.spec.json",
+            "karmaConfig": "projects/candypal/website/karma.conf.js"
           }
         }
       }

@@ -1,0 +1,26 @@
+{
+  "name": "@candypal/website",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/candypal/website/",
+    "copy:files": "cp --parents -p schematics/*/files/** ../../dist/candypal/website/",
+    "copy:collection": "cp schematics/collection.json ../../dist/candypal/website/schematics/collection.json",
+    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection"
+  },
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "ng-update": {
+    "migrations": "./schematics/migration.json"
+  },
+  "peerDependencies": {
+    "@angular/common": "^12.0.0",
+    "@angular/core": "^12.0.0",
+    "bootstrap": "^5.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.1.0"
+  }
+}

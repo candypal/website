@@ -1,0 +1,26 @@
+<cfs-header
+  [middleButton]="middleButton"
+  [header]="header"
+  (middleButtonClick)="openLocationChangeModel($event)">
+</cfs-header>
+
+<cfs-alerts></cfs-alerts>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+
+<cfs-footer
+  [footer]="footer">
+</cfs-footer>
+
+<agm-map
+  [latitude]="coordinates && coordinates.latitude"
+  [longitude]="coordinates && coordinates.longitude"
+  [zoom]="16"
+  (mapReady)="mapReady($event)">
+</agm-map>
+
+<div id="map"></div>
+<div #gmap style="width:100%;height:400px"></div>
+<!--<google-map></google-map>-->

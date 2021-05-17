@@ -1,0 +1,35 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <div *ngIf="userService.isLoggedIn" class="card">
+      <div class="card-header d-flex justify-content-between">
+        <h6>{{userService?.authorizedUser?.firstName}} {{userService?.authorizedUser?.lastName}}</h6>
+      </div>
+      <div class="card-block">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Email: {{userService?.authorizedUser?.email}}
+                </li>
+                <li class="list-group-item">
+                  Phone: {{userService?.authorizedUser?.phone}}
+                </li>
+                <li class="list-group-item">
+                  Type: {{userService?.authorizedUser?.authorized | json}}
+                </li>
+                <li class="list-group-item">
+                  <button type="button" class="btn btn-success mb-2" (click)="makeLogout()">
+                    Log out<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h4 class="modal-title">Change Location</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <fa-icon [icon]="faStreetView"></fa-icon>
+        </div>
+      </div>
+      <input type="text" #search name="term" placeholder="Start typing address..."
+             autocorrect="off" autocapitalize="off" spellcheck="off" class="form-control"/>
+
+    </div>
+    <small><b>Current location:</b> {{input && input.formatted_address || 'Please select your location'}}</small>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-warning" (click)="activeModal.dismiss('Done')">Done</button>
+</div>
