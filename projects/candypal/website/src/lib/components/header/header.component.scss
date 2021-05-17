@@ -1,0 +1,70 @@
+.header {
+  background-color: #ec5f1b;
+  .gauramarg-left {
+    position: absolute;
+    top: 0px;
+  }
+  .gauramarg-right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  .container {
+    background-color: #ec5f1b;
+    nav {
+      background-color: #ec5f1b;
+      min-height: 77px;
+      padding-left: 0;
+      padding-right: 0;
+      /*ul {
+        li {
+          a:link {
+            color: #ffffff;
+          }
+
+          !* visited link *!
+          a:visited {
+            color: #ffffff;
+          }
+
+          !* mouse over link *!
+          a:hover {
+            color: red;
+          }
+
+          !* selected link *!
+          a:active {
+            color: #ec7a39;
+          }
+        }
+      }*/
+    }
+    .brand-image {
+      padding-top: 21px;
+    }
+    .brand-text {
+      color: #ffffff;
+      font-size: 41px;
+      font-weight: bold;
+    }
+  }
+}
+
+
+
+.street-button {
+  color: #ffffff;
+  padding: 0px 5px;
+  font-size: 16px;
+}
+
+.street-view {
+  color: #ec8e49;
+  vertical-align: baseline;
+  margin: 5px;
+  font-size: 18px;
+}
+
+
+
+
