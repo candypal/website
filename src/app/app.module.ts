@@ -1,12 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {environment} from "../environments/environment";
 import {WebsiteModule} from "@candypal/website";
+import {HomeModule} from "./home/home.module";
+import {RestaurantModule} from "./restaurant/restaurant.module";
+import {AgmCoreModule} from "@agm/core";
+import {NgbRatingModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -14,11 +16,21 @@ import {WebsiteModule} from "@candypal/website";
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
-    NgbModule,
-    FontAwesomeModule,
-    WebsiteModule
+    WebsiteModule.forRoot({
+      restUrl: environment.restUrl,
+      loginUrl: environment.restUrl + '/authentication/login',
+      alertDelayInSeconds: 7
+    }),
+    HomeModule,
+    RestaurantModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBMIoVYsqVdrlm_IwdKSkLEhpMH7JtEIT8',
+      libraries: [
+        'places'
+      ]
+    }),
+    NgbRatingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

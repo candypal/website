@@ -23,13 +23,24 @@ describe('website', () => {
     name: 'foo'
   };
 
-  const unitTestTreeGlobal: UnitTestTree;
+  let unitTestTree: UnitTestTree;
+
+  beforeEach(async () => {
+    unitTestTree = await schematicRunner
+      .runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions)
+      .toPromise();
+    unitTestTree = await schematicRunner
+      .runExternalSchematicAsync('@schematics/angular', 'application', appOptions, unitTestTree)
+      .toPromise();
+  });
 
   beforeEach(() => {
-    schematicRunner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions)
+    schematicRunner
+      .runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions)
       .subscribe((unitTestTreeWorkspace: UnitTestTree) => {
-        schematicRunner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions, unitTestTreeWorkspace)
-          .subscribe((unitTestTreeAppliction: UnitTestTree) => {
+        schematicRunner
+          .runExternalSchematicAsync('@schematics/angular', 'application', appOptions, unitTestTreeWorkspace)
+          .subscribe((unitTestTreeLocal: UnitTestTree) => {
 
         });
       });
@@ -38,7 +49,7 @@ describe('website', () => {
 
   it('works', () => {
     const runner = new SchematicTestRunner('schematics', collectionPath);
-    runner.runSchematicAsync('my-component', schemaOptions, unitTestTreeGlobal).toPromise().then(tree => {
+    runner.runSchematicAsync('my-component', schemaOptions, unitTestTree).toPromise().then(tree => {
       const appComponent = tree.readContent('/projects/candiman/website/src/app/app.component.ts');
       expect(appComponent).toContain(`name = '${schemaOptions.name}'`);
     });

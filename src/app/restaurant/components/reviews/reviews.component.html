@@ -1,0 +1,26 @@
+<div class="container" *ngIf="reviews.length > 0">
+  <h6>Reviews</h6>
+  <div class="card-deck">
+    <div class="card" *ngFor="let review of reviews">
+      <img class="card-img-top" [src]="review.profile_photo_url" alt="{{review.author_name}}">
+      <div class="card-body">
+        <h5 class="card-title">{{review.author_name}}</h5>
+        <ngb-rating [(rate)]="review.rating" [starTemplate]="reviewRating" [readonly]="true" [max]="5"></ngb-rating>
+        <p class="card-text">{{review.relative_time_description}}</p>
+        <p class="card-text">
+          <cfs-read-more
+            [text]="review.text"
+            [maxLength]="100"
+            [linkLabel]="'...read more'"
+            [hideLink]="false">
+          </cfs-read-more>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #reviewRating let-fill="fill">
+  <span class="star" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill">&#9734;</span>&#9733;
+  </span>
+</ng-template>

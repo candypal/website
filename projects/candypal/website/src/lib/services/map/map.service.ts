@@ -1,6 +1,6 @@
 import {ElementRef, EventEmitter, Injectable, NgZone} from '@angular/core';
 import {Observable, Subject, Subscriber} from 'rxjs';
-import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
+
 
 const GEOLOCATION_ERRORS = {
   'errors.location.unsupportedBrowser': 'Browser does not support location services',
@@ -14,13 +14,13 @@ const GEOLOCATION_ERRORS = {
 })
 export class MapService {
 
-  public coordinates: Coordinates | undefined;
+  public coordinates: any | undefined;
   public map: any;
   public geocoder: { geocode: (arg0: { latLng: any; }, arg1: (results: any[], status: string) => void) => void; } | undefined;
   public latLng: any;
   public location: Observable<any> | undefined;
   public locationBehaviorSubject = new Subject<any>();
-  public coordinatesBehaviorSubject = new  Subject<any>();
+  public coordinatesBehaviorSubject = new Subject<any>();
   public type = 'restaurant';
   public keyword = 'restaurant';
 
@@ -29,11 +29,11 @@ export class MapService {
   ) {
   }
 
-  public getBrowserCoordinates(opts: PositionOptions | undefined): Observable<Position> {
+  public getBrowserCoordinates(opts: PositionOptions | undefined): Observable<any> {
     return new Observable(observer => {
       if (window.navigator && window.navigator.geolocation) {
         window.navigator.geolocation.getCurrentPosition(
-          (coordinates: Position) => {
+          (coordinates: any) => {
             this.coordinates = coordinates.coords;
             observer.next(coordinates);
             this.coordinatesBehaviorSubject.next(coordinates);
@@ -100,7 +100,7 @@ export class MapService {
         center: new (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude),
         mapTypeId: (<any>window).google.maps.MapTypeId.ROADMAP
       };
-
+      console.log((<any>window).google.maps);
       const places = new (<any>window).google.maps.places.PlacesService(this.map);
       if (keyword) {
         search.keyword = keyword;
@@ -276,7 +276,7 @@ export class MapService {
 
   public storeAndUpdateRestaurantsManual(userLocation: { latitude: any; longitude: any; }) {
     return new Observable((subscriber: Subscriber<object>) => {
-      this.getRestaurantsFromGoogleMap(userLocation).subscribe( (userNearbyRestaurants: any) => {
+      this.getRestaurantsFromGoogleMap(userLocation).subscribe((userNearbyRestaurants: any) => {
         console.log('storeAndUpdateRestaurantsManual|userNearbyRestaurants:%o', userNearbyRestaurants);
         for (let i = 0; i < userNearbyRestaurants.restaurant.length; i++) {
           // $rootScope.restaurant.items.splice(0, 0, userNearbyRestaurants.restaurant[i]);
@@ -289,7 +289,7 @@ export class MapService {
           console.log('Error while storing fetched restaurants from google map! :: ' + error);
           observer.reject(error);
         });*/
-      }, (error) => {
+      }, (error: any) => {
         subscriber.next(error);
       });
     });

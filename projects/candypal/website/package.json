@@ -1,22 +1,26 @@
 {
   "name": "@candypal/website",
   "version": "0.0.1",
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/candypal/website/",
+    "copy:files": "cp --parents -p schematics/*/files/** ../../dist/candypal/website/",
+    "copy:collection": "cp schematics/collection.json ../../dist/candypal/website/schematics/collection.json",
+    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection"
+  },
   "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
   "ng-update": {
     "migrations": "./schematics/migration.json"
   },
   "peerDependencies": {
-    "@angular/common": "^11.0.5",
-    "@angular/core": "^11.0.5",
-    "@ng-bootstrap/ng-bootstrap": "^4.0.0",
-    "@fortawesome/angular-fontawesome": "^0.6.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.29",
-    "@fortawesome/free-solid-svg-icons": "^5.13.1",
-    "@fortawesome/free-regular-svg-icons": "^5.13.1",
-    "@fortawesome/free-brands-svg-icons": "5.13.1",
-    "bootstrap": "^4.5.0"
+    "@angular/common": "^12.0.0",
+    "@angular/core": "^12.0.0",
+    "bootstrap": "^5.0.0"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   }
 }

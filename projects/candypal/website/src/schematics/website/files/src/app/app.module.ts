@@ -1,14 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {InjectionToken, NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
-import {WebsiteModule} from '@candiman/website';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {environment} from '../environments/environment';
 
-
+// Export window object
 export const Window = new InjectionToken<any>('A reference to the window');
-
 export function windowFactory() {
   return window;
 }
@@ -20,17 +15,6 @@ export function windowFactory() {
   ],
   imports: [
     BrowserModule,
-    // NgbModule,
-    // NbLayoutModule,
-    // NbAlertModule,
-    // NbInputModule,
-    // NbButtonModule,
-    // NbCheckboxModule,
-    WebsiteModule.forRoot({
-      loginUrl: environment.restUrl + '/user/login',
-      alertDelayInSeconds: 7
-    }),
-    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -47,4 +31,5 @@ export function windowFactory() {
     AppComponent
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

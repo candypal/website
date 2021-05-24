@@ -16,13 +16,11 @@ import {NoAuthGuardService} from './services/no-auth-guard/no-auth-guard.service
 import {GoogleAnalyticsService} from './services/google-analytics/google-analytics.service';
 import {RouterModule} from '@angular/router';
 import {PrivacyComponent} from './components/privacy/privacy.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CoreService} from './services/core/core.service';
 import {FilterPipe} from './services/filter-pipe/filter-pipe.service';
 import {ChangeLocationModelComponent} from './components/change-location-model/change-location-model.component';
 import {ProfileComponent} from './components/profile/profile.component';
 import {CorouselComponent} from './components/corousel/corousel.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ContentLoadingComponent} from './components/content-loading/content-loading.component';
 import {AutoScrollDirective} from './directives/auto-scroll.directive';
 import {ModelComponent} from './components/model/model.component';
@@ -30,31 +28,25 @@ import {CfsInfiniteScrollService} from './services/cfs-infinite-scroll/cfs-infin
 import {ReadMoreComponent} from './components/read-more/read-more.component';
 import {SafeHtmlPipe} from './pipes/safe-html/safe-html.pipe';
 import {WebsiteComponent} from './components/website/website.component';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {NgbAlertModule, NgbCarouselModule, NgbCollapseModule} from "@ng-bootstrap/ng-bootstrap";
+import {WebsiteEnvironmentConfigs} from "./interfaces/website-environment-configs";
 
 export const WINDOW = new InjectionToken<any>('A reference to the window');
-
-export interface WebsiteEnvironment {
-  restUrl?: string;
-  alertDelayInSeconds?: number;
-  loginUrl: string;
-  allowTokenToAllDomain?: string;
-}
 
 export function windowFactory() {
   return window;
 }
-
-const exportedModules = [
-  NgbModule
-]
 
 @NgModule({
   imports: [
     RouterModule,
     CommonModule,
     ReactiveFormsModule,
-    NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    NgbAlertModule,
+    NgbCarouselModule,
+    NgbCollapseModule,
   ],
   declarations: [
     HeaderComponent,
@@ -104,7 +96,7 @@ const exportedModules = [
   ]
 })
 export class WebsiteModule {
-  public static forRoot(websiteEnvironment: WebsiteEnvironment): ModuleWithProviders<WebsiteModule> {
+  public static forRoot(websiteEnvironment: WebsiteEnvironmentConfigs): ModuleWithProviders<WebsiteModule> {
     return {
       ngModule: WebsiteModule,
       providers: [

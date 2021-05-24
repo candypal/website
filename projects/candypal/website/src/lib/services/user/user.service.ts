@@ -2,8 +2,8 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {EncryptionService} from '../encryption/encryption.service';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {WebsiteEnvironment} from '../../website.module';
 import {Observable, of, Subject} from 'rxjs';
+import {WebsiteEnvironmentConfigs} from "../../interfaces/website-environment-configs";
 
 export interface User {
   authorized?: Array<string>;
@@ -46,7 +46,7 @@ export class UserService {
   public allowedDomainToAddToken: Array<string> = [];
 
   constructor(
-    @Optional() @Inject('websiteEnvironment') private websiteEnvironment: WebsiteEnvironment,
+    @Optional() @Inject('websiteEnvironment') private websiteEnvironment: WebsiteEnvironmentConfigs,
     private encryptionService: EncryptionService,
     private httpClient: HttpClient
   ) {

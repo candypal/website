@@ -3,7 +3,7 @@
 TAG=0
 BASEDIR=$(dirname "$0")
 echo "BASEDIR=$BASEDIR"
-SRC_SCHEMATICS="projects/candypal/website/src/schematics"
+SRC_SCHEMATICS="project/candypal/website/src/schematics"
 DIST_SCHEMATICS="dist/candypal/website/schematics"
 
 if [ -n "$1" ]; then
@@ -20,15 +20,15 @@ pwd
 
 ng build @candypal/website --prod
 echo "Library build done..."
-#npm run @candypal/website-schematics
+npm run @candypal/website-schematics
 echo "Schematics build done..."
 echo "==== Moving JSON files ====="
 
 pwd
-cp projects/candypal/website/src/schematics/collection.json dist/candypal/website/schematics/collection.json | true
-cp projects/candypal/website/src/schematics/migration.json dist/candypal/website/schematics/migration.json | true
-cp projects/candypal/website/src/schematics/website/schema.json dist/candypal/website/schematics/website/schema.json | true
-cp -R projects/candypal/website/src/schematics/website/files dist/candypal/website/schematics/website/files | true
+cp projects/candypal/website/src/schematics/collection.json dist/candypal/website/schematics/collection.json
+cp projects/candypal/website/src/schematics/migration.json dist/candypal/website/schematics/migration.json
+cp projects/candypal/website/src/schematics/website/schema.json dist/candypal/website/schematics/website/schema.json
+cp -R projects/candypal/website/src/schematics/website/files dist/candypal/website/schematics/website/files
 pwd
 
 echo "-----Publishing artifacts to npm -----"

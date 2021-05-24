@@ -44,16 +44,16 @@ export class AppInitializerService {
       // Check if the user token is available and also valid
       if (this.authorizedUser &&
         this.authorizedUser.accessToken && (this.authorizedUser.expiresIn !== undefined && this.authorizedUser.expiresIn > (new Date().getTime()))) {
-        resolve();
+        resolve(true);
       } else {
         this.authorizedUser = this.userService.authorizedUser;
         if (this.authorizedUser && this.authorizedUser.accessToken
           && (this.authorizedUser.expiresIn !== undefined && this.authorizedUser.expiresIn > (new Date().getTime()))) {
           // localStorage.setItem('authorizedUser', JSON.stringify(this.authorizedUser));
-          resolve();
+          resolve(true);
         } else {
           // this.login();
-          resolve();
+          resolve(true);
         }
       }
 
