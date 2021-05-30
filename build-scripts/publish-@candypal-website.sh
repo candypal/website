@@ -20,7 +20,7 @@ pwd
 
 ng build @candypal/website --prod
 echo "Library build done..."
-npm run @candypal/website-schematics
+# npm run @candypal/website-schematics
 echo "Schematics build done..."
 echo "==== Moving JSON files ====="
 

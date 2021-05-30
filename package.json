@@ -10,7 +10,7 @@
     "@candypal/website": "ng build @candypal/website",
     "@candypal/website-watch": "ng build @candypal/website --watch",
     "@candypal/website-schematics": "tsc -p projects/candypal/website/tsconfig.schematics.json",
-    "publish-@candypal/website": "./publish-@candifood-website.sh",
+    "publish-@candypal/website": "./build-scripts/publish-@candypal-website.sh",
     "gcloud-deploy-no-promot": "gcloud app deploy --no-promote",
     "gcloud-deploy": "gcloud app deploy",
     "bundle-report": "ng build --prod --stats-json && webpack-bundle-analyzer dist/candifood-ui/stats.json"
