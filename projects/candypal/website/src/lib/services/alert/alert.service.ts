@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Observable } from 'rxjs';
 
-export interface Alert {
+export interface AlertModel {
   title: string;
   subTitle: string;
   text: string;
@@ -10,26 +10,26 @@ export interface Alert {
   closeDelay?: number;
 }
 
-export class SuccessAlert implements Alert {
+export class SuccessAlert implements AlertModel {
   public type: AlertType;
   constructor (public title: string, public subTitle: string, public text: string, public closeDelay?: number) {
     this.type = 'success';
   }
 }
 
-export class InfoAlert implements Alert {
+export class InfoAlert implements AlertModel {
   readonly type: AlertType;
   constructor (public title: string, public subTitle: string, public text: string, public closeDelay?: number) {
     this.type = 'info';
   }
 }
-export class WarningAlert implements Alert {
+export class WarningAlert implements AlertModel {
   readonly type: AlertType;
   constructor (public title: string, public subTitle: string, public text: string, public closeDelay?: number) {
     this.type = 'warning';
   }
 }
-export class DangerAlert implements Alert {
+export class DangerAlert implements AlertModel {
   readonly type: AlertType;
   constructor (public title: string, public subTitle: string, public text: string, public closeDelay?: number) {
     this.type = 'danger';
@@ -44,7 +44,7 @@ export type AlertType = 'success' | 'info' | 'warning' | 'danger';
 })
 export class AlertService {
 
-  private _alerts: ReplaySubject<Alert>;
+  private _alerts: ReplaySubject<AlertModel>;
 
   constructor() {
     this._alerts = new ReplaySubject();
@@ -53,11 +53,11 @@ export class AlertService {
   /**
    * Sends a message to be seen globally.
    */
-  public alert(alert: Alert) {
+  public alert(alert: AlertModel) {
     this._alerts.next(alert);
   }
 
-  get alerts(): Observable<Alert> {
+  get alerts(): Observable<AlertModel> {
     return this._alerts.asObservable();
   }
 }
