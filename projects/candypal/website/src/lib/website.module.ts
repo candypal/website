@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {WebsiteComponent} from "./components/website/website.component";
 import {HeaderComponent} from "./components/header/header.component";
 import {FooterComponent} from "./components/footer/footer.component";
@@ -19,6 +19,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {NgbAlertModule, NgbCarouselModule, NgbCollapseModule} from "@ng-bootstrap/ng-bootstrap";
 import {RouterModule} from "@angular/router";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {WebsiteEnvironmentConfigs} from "./interfaces/website-environment-configs";
 
 
 @NgModule({
@@ -66,4 +67,24 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     SafeHtmlPipe,
   ]
 })
-export class WebsiteModule { }
+export class WebsiteModule {
+  public static forRoot(websiteEnvironment: WebsiteEnvironmentConfigs): ModuleWithProviders<WebsiteModule> {
+    return {
+      ngModule: WebsiteModule,
+      providers: [
+        {
+          provide: 'websiteEnvironment',
+          useValue: websiteEnvironment
+        },
+        SafeHtmlPipe
+      ]
+    };
+  }
+
+  constructor(@Optional() @SkipSelf() parentModule: WebsiteModule) {
+    if (parentModule) {
+      throw new Error(
+        'WebsiteModule is already loaded. Import it in the AppModule only');
+    }
+  }
+}

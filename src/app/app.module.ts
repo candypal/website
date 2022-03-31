@@ -8,6 +8,7 @@ import {HomeModule} from "./home/home.module";
 import {RestaurantModule} from "./restaurant/restaurant.module";
 import {NgbRatingModule} from "@ng-bootstrap/ng-bootstrap";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -16,11 +17,11 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    WebsiteModule/*.forRoot({
+    WebsiteModule.forRoot({
       restUrl: environment.restUrl,
       loginUrl: environment.restUrl + '/authentication/login',
       alertDelayInSeconds: 7
-    })*/,
+    }),
     HomeModule,
     RestaurantModule,
     NgbRatingModule,

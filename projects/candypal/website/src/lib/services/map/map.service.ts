@@ -64,8 +64,8 @@ export class MapService {
 
   public getAddressFromCoordinates(latLngValue: { latitude: any; longitude: any; }) {
     return new Observable(observer => {
-      this.geocoder = this.geocoder || new (<any>window).google.maps.Geocoder();
-      this.latLng = this.latLng || new (<any>window).google.maps.LatLng(latLngValue.latitude, latLngValue.longitude);
+      this.geocoder = this.geocoder || (<any>window).google.maps.Geocoder();
+      this.latLng = this.latLng || (<any>window).google.maps.LatLng(latLngValue.latitude, latLngValue.longitude);
       this.geocoder && this.geocoder.geocode({'latLng': this.latLng}, (results: any[], status: string) => {
         if (status === (<any>window).google.maps.GeocoderStatus.OK) {
           const newLocation: any = this.processFullLocation(results[0]);
@@ -84,6 +84,7 @@ export class MapService {
 
 
   public getRestaurantsFromGoogleMap(userLocation: { latitude: any; longitude: any; }) {
+    console.log('getRestaurantsFromGoogleMap|this.map: %o', this.map);
     return new Observable(observer => {
       const keyword = 'restaurant';
       const rankBy = 'distance';
@@ -100,7 +101,7 @@ export class MapService {
         center: new (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude),
         mapTypeId: (<any>window).google.maps.MapTypeId.ROADMAP
       };
-      console.log((<any>window).google.maps);
+      console.log('getRestaurantsFromGoogleMap: %o', (<any>window).google.maps);
       const places = new (<any>window).google.maps.places.PlacesService(this.map);
       if (keyword) {
         search.keyword = keyword;
@@ -110,11 +111,11 @@ export class MapService {
 
       if (rankBy === 'distance' && (search.types || search.keyword)) {
         // search.rankBy = (<any>window).google.maps.places.RankBy.DISTANCE;
-        search.location = new (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude);
-        const centerMarker = new (<any>window).google.maps.Marker({
+        search.location = (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude);
+        const centerMarker = (<any>window).google.maps.Marker({
           position: search.location,
           animation: (<any>window).google.maps.Animation.DROP,
-          map: (<any>window).google.maps.map
+          map: this.map
         });
       } else {
         console.log('nearbyrestaurant: setting the laglng:%o', userLocation);
@@ -160,7 +161,7 @@ export class MapService {
   public getGoogleMapPlaceDetail(googlePlaceId: any) {
     return new Observable(observer => {
       // console.log('getGoogleMapPlaceDetail|parameter:%o', googlePlaceId);
-      const places = new (<any>window).google.maps.places.PlacesService(this.map) as any;
+      const places = (<any>window).google.maps.places.PlacesService(this.map) as any;
       places.getDetails({placeId: googlePlaceId}, function (place: any, status: string) {
         console.log('MapService|place-detail: %o | status:%o', place, status);
         if (status === (<any>window).google.maps.places.PlacesServiceStatus.OK) {
@@ -186,8 +187,8 @@ export class MapService {
   public getGoogleMapPhotos(googlePlaceId: string) {
     return new Observable(observer => {
       // console.log('getGoogleMapPlaceDetail|parameter:%o', googlePlaceId);
-      const map = new (<any>window).google.maps.Map(document.getElementById('map-canvas'));
-      const places = new (<any>window).google.maps.places.PlacesService(map);
+      const map = (<any>window).google.maps.Map(document.getElementById('map-canvas'));
+      const places = (<any>window).google.maps.places.PlacesService(map);
       places.getDetails({placeId: googlePlaceId}, function (place: { international_phone_number: any; formatted_phone_number: any; place_id: any; website: any; url: any; }, status: string) {
         console.log('mapService|fetched from map|place::::%o and status: %o', place, status);
         if (status === (<any>window).google.maps.places.PlacesServiceStatus.OK) {
@@ -250,7 +251,7 @@ export class MapService {
   public autoComplete(searchElementRef: ElementRef | undefined, output: EventEmitter<string>) {
 
     if (searchElementRef) {
-      const autoComplete = new (<any>window).google.maps.places.Autocomplete(searchElementRef.nativeElement, {
+      const autoComplete = (<any>window).google.maps.places.Autocomplete(searchElementRef.nativeElement, {
         types: ['address']
       });
 

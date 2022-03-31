@@ -228,7 +228,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBMIoVYsqVdrlm_IwdKSkLEhpMH7JtEIT8';
     this.loadScript(url).then((mapLoaded: any) => {
-      console.log('the map loaded successfully');
+      console.log('the map loaded successfully %o', mapLoaded);
+
+      // load the google map in UI
+      const mapProp = {
+        center: new google.maps.LatLng(18.5793, 73.8143),
+        zoom: 2,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      this.map = new google.maps.Map(document.getElementById('map'), mapProp);
+      this.mapService.map = this.map;
+
       // gets the coordinates from the browser and address from google map. this happens first time
       this.mapService.getBrowserCoordinates({}).subscribe({
         next: (position: any) => {
@@ -281,13 +291,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const mapProp = {
-      center: new google.maps.LatLng(18.5793, 73.8143),
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    this.mapService.map = this.map;
 
   }
 

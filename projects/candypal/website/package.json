@@ -5,7 +5,9 @@
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",
     "@angular/google-maps": "^13.0.0",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "bootstrap": "^5.0.0",
+    "@types/bootstrap": "^5.0.13"
   },
   "dependencies": {
     "tslib": "^2.3.0"
