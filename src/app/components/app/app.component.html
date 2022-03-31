@@ -14,12 +14,6 @@
   [footer]="footer">
 </cfs-footer>
 
-<agm-map
-  [latitude]="coordinates && coordinates.latitude"
-  [longitude]="coordinates && coordinates.longitude"
-  [zoom]="16"
-  (mapReady)="mapReady($event)">
-</agm-map>
 
 <div id="map"></div>
 <div #gmap style="width:100%;height:400px"></div>

@@ -5,7 +5,6 @@ import {Brand, Header, HeaderService, Link, Logo, MiddleButton} from '../../serv
 import {Subscription} from "rxjs";
 
 
-
 @Component({
   selector: 'cfs-header',
   templateUrl: './header.component.html',

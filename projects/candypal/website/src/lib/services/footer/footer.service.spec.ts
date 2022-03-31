@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { FooterService } from './footer.service';
+import {FooterService} from './footer.service';
 
 describe('FooterService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

@@ -1,4 +1,4 @@
-import { AutoScrollDirective } from './auto-scroll.directive';
+import {AutoScrollDirective} from './auto-scroll.directive';
 import {ElementRef} from '@angular/core';
 
 describe('AutoScrollDirective', () => {

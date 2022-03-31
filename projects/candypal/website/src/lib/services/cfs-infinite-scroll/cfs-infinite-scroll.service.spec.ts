@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { CfsInfiniteScrollService } from './cfs-infinite-scroll.service';
+import {CfsInfiniteScrollService} from './cfs-infinite-scroll.service';
 
 describe('CfsInfiniteScrollService', () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges} from '@angular/core';
 
 @Component({
   selector: 'cfs-read-more',

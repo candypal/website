@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { CorouselComponent } from './corousel.component';
+import {CorouselComponent} from './corousel.component';
 
 describe('CorouselComponent', () => {
   let component: CorouselComponent;

@@ -1,8 +1,7 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {EncryptionService} from '../encryption/encryption.service';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map} from 'rxjs/operators';
-import {Observable, of, Subject} from 'rxjs';
+import {catchError, map, Observable, of, Subject} from 'rxjs';
 import {WebsiteEnvironmentConfigs} from "../../interfaces/website-environment-configs";
 
 export interface User {
@@ -74,7 +73,7 @@ export class UserService {
 
   makeLogout() {
     localStorage.removeItem('authorizedUser');
-    this.authorizedUserSubject.next(undefined);
+    this.authorizedUserSubject.next({});
     this.isLoggedIn = false;
     this.authorizedUser = undefined;
   }

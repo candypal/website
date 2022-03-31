@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AppInitializerService } from './app-initializer.service';
+import {AppInitializerService} from './app-initializer.service';
 
 describe('AppInitializerService', () => {
   let service: AppInitializerService;

@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ChangeLocationModelComponent } from './change-location-model.component';
+import {ChangeLocationModelComponent} from './change-location-model.component';
 
 describe('ChangeLocationModelComponent', () => {
   let component: ChangeLocationModelComponent;

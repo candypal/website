@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {RestaurantService} from '../../restaurant/service/restaurant.service';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import {
   UserService
 } from '@candypal/website';
 import {Router} from '@angular/router';
+import {DOCUMENT} from "@angular/common";
 
 
 export declare var google: any;
@@ -49,57 +50,64 @@ export class AppComponent implements OnInit, AfterViewInit {
     private cfsInfiniteScrollService: CfsInfiniteScrollService,
     private userService: UserService,
     private headerService: HeaderService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    @Inject(DOCUMENT) private document: Document,
+    private renderer2: Renderer2
   ) {
 
     // Login users when user submit the email and password
     this.userService.loginSubmittedUserSubject.subscribe((user: User) => {
       // do the login as well
       this.userService.login({email: user.email, password: user.password})
-        .subscribe((response: any) => {
-          // navigate by url is used due to the fact that the returnUrl may have optional params which need to be parsed.
-          // same is true for query params
-          if (response !== null) {
-            this.router.navigate([''], {replaceUrl: true});
-          } else {
-            /*this.alertService.alert({
-              title: 'Login failure!',
-              subTitle: 'Unable to login! Please try again or contact support team.',
-              text: response,
-              type: 'danger',
-              closeDelay: 10
-            });*/
+        .subscribe({
+          next: (response: any) => {
+            // navigate by url is used due to the fact that the returnUrl may have optional params which need to be parsed.
+            // same is true for query params
+            if (response !== null) {
+              this.router.navigate([''], {replaceUrl: true});
+            } else {
+              /*this.alertService.alert({
+                title: 'Login failure!',
+                subTitle: 'Unable to login! Please try again or contact support team.',
+                text: response,
+                type: 'danger',
+                closeDelay: 10
+              });*/
+            }
+          },
+          error: (error: any) => {
+            // mostly this is never execute as error are handled in login service in catchError blocked and converted to obwervable
+            console.log('LoginComponent|login|error:%o', error);
           }
-        }, (error: any) => {
-          // mostly this is never execute as error are handled in login service in catchError blocked and converted to obwervable
-          console.log('LoginComponent|login|error:%o', error);
         });
     });
 
     // Subscribe to the login
-    this.userService.authorizedUserSubject.subscribe((user: any) => {
+    this.userService.authorizedUserSubject.subscribe({
+      next: (user: any) => {
 
-      console.log('AppComponent|userservice.userSubject called|user:%0', user);
-      if (user === null) {
-        // logout condition
-        this.headerService.changeRightLink([
-          {label: 'login', url: '/login'},
-        ]);
-      } else if (!user.status || user.status === 200) {
-        // login condition
-        this.headerService.changeRightLink([
-          {label: 'profile', url: '/profile'},
-        ]);
+        console.log('AppComponent|userservice.userSubject called|user:%0', user);
+        if (user === null) {
+          // logout condition
+          this.headerService.changeRightLink([
+            {label: 'login', url: '/login'},
+          ]);
+        } else if (!user.status || user.status === 200) {
+          // login condition
+          this.headerService.changeRightLink([
+            {label: 'profile', url: '/profile'},
+          ]);
 
-      } else if (user.status === 'login_failure' || user.status !== 200) {
-        // login failure
-        this.alertService.alert({
-          title: 'Login failure!',
-          subTitle: 'Unable to login! Please try again or contact support team.',
-          text: user,
-          type: 'danger',
-          closeDelay: 30
-        });
+        } else if (user.status === 'login_failure' || user.status !== 200) {
+          // login failure
+          this.alertService.alert({
+            title: 'Login failure!',
+            subTitle: 'Unable to login! Please try again or contact support team.',
+            text: user,
+            type: 'danger',
+            closeDelay: 30
+          });
+        }
       }
     });
 
@@ -218,46 +226,57 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
 
-    // gets the coordinates from the browser and address from google map. this happens first time
-    this.mapService.getBrowserCoordinates({}).subscribe((position: any) => {
-      this.coordinates = position && position.coords;
-      this.mapService.getAddressFromCoordinates({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      }).subscribe((location: any) => {
-        this.header.middleButton = {
-          display: true,
-          label: location.formatted_address,
-          loading: false
-        };
-        this.changeDetectorRef.detectChanges();
-        this._getRestaurantsFromMap(location);
-      }, (error: any) => {
-        this.header.middleButton = {
-          display: true,
-          label: 'select location here.',
-          loading: false
-        };
+    const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBMIoVYsqVdrlm_IwdKSkLEhpMH7JtEIT8';
+    this.loadScript(url).then((mapLoaded: any) => {
+      console.log('the map loaded successfully');
+      // gets the coordinates from the browser and address from google map. this happens first time
+      this.mapService.getBrowserCoordinates({}).subscribe({
+        next: (position: any) => {
+          this.coordinates = position && position.coords;
+          this.mapService.getAddressFromCoordinates({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }).subscribe({
+            next: (location: any) => {
+              this.header.middleButton = {
+                display: true,
+                label: location.formatted_address,
+                loading: false
+              };
+              this.changeDetectorRef.detectChanges();
+              this._getRestaurantsFromMap(location);
+            },
+            error: (error: any) => {
+              this.header.middleButton = {
+                display: true,
+                label: 'select location here.',
+                loading: false
+              };
+            }
+          });
+        },
+        error: (error: any) => {
+          this.header.middleButton = {
+            display: true,
+            label: 'select location here.',
+            loading: false
+          };
+        }
       });
-    }, (error: any) => {
-      this.header.middleButton = {
-        display: true,
-        label: 'select location here.',
-        loading: false
-      };
-    });
 
 
-    // loading restaurant on change of address
-    this.mapService.locationBehaviorSubject.subscribe((location: any) => {
-      this.location = location;
-      this.restaurantService.restaurants = [];
-      this._getRestaurantsFromMap(location);
-    });
+      // loading restaurant on change of address
+      this.mapService.locationBehaviorSubject.subscribe((location: any) => {
+        this.location = location;
+        this.restaurantService.restaurants = [];
+        this._getRestaurantsFromMap(location);
+      });
 
-    // loading restaurants on autoscroll
-    this.cfsInfiniteScrollService.scrolledBehaviorSubject.subscribe((position: any) => {
-      this.restaurantService.getRestaurants(this.location);
+      // loading restaurants on autoscroll
+      this.cfsInfiniteScrollService.scrolledBehaviorSubject.subscribe((position: any) => {
+        this.restaurantService.getRestaurants(this.location);
+      });
+
     });
   }
 
@@ -277,9 +296,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.modalRef.componentInstance.input = this.location;
     this.modalRef.componentInstance.output.subscribe((location: any) => {
       this.location = location;
-      const addess: string = location.formatted_address || 'Did not find';
+      const address: string = location.formatted_address || 'Did not find';
       // @ts-ignore
-      this.header.middleButton.label = addess;
+      this.header.middleButton.label = address;
       // @ts-ignore
       this.modalRef.componentInstance.input = this.location;
       this.mapService.locationBehaviorSubject.next(location);
@@ -306,4 +325,20 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
     });
   }
+
+
+  private loadScript(url: string) {
+    return new Promise((resolve, reject) => {
+      const script = this.renderer2.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+      script.text = ``;
+      script.async = true;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      this.renderer2.appendChild(this.document.body, script);
+    })
+  }
+
 }

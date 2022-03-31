@@ -1,7 +1,7 @@
-import {TestBed, inject} from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import {AlertService, SuccessAlert, InfoAlert, WarningAlert, DangerAlert} from './alert.service';
-import {bufferCount} from 'rxjs/operators';
+import {AlertService, DangerAlert, InfoAlert, SuccessAlert, WarningAlert} from './alert.service';
+import {bufferCount} from 'rxjs';
 
 describe('AlertService', () => {
   beforeEach(() => {

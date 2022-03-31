@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { ModelComponent } from './model.component';
+import {ModelComponent} from './model.component';
 
 describe('ModelComponent', () => {
   let component: ModelComponent;
