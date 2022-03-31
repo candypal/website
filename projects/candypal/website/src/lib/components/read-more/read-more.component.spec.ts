@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReadMoreComponent} from './read-more.component';
 import {SafeHtmlPipe} from '../../pipes/safe-html/safe-html.pipe';
 

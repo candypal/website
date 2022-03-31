@@ -1,22 +1,23 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  EventEmitter,
   Inject,
   Input,
+  NgZone,
   OnChanges,
   OnInit,
   Optional,
   Output,
+  Renderer2,
   SimpleChanges,
-  EventEmitter,
-  ChangeDetectionStrategy, ViewEncapsulation, Renderer2, ElementRef, NgZone
+  ViewEncapsulation
 } from '@angular/core';
-import {take, map} from 'rxjs/operators';
-import {Observable, timer} from 'rxjs';
+import {map, Observable, of, take, timer} from 'rxjs';
 import {AlertModel, AlertService} from '../../services/alert/alert.service';
 import {WebsiteEnvironmentConfigs} from "../../interfaces/website-environment-configs";
-import {Carousel, Modal, Alert} from 'bootstrap';
-import {ngbRunTransition} from "@ng-bootstrap/ng-bootstrap/util/transition/ngbTransition";
-import {ngbAlertFadingTransition} from "@ng-bootstrap/ng-bootstrap/alert/alert-transition";
+import {Alert} from 'bootstrap';
 
 @Component({
   selector: 'cfs-alerts',
@@ -71,12 +72,13 @@ export class AlertsComponent implements OnInit, OnChanges {
   }
 
   close(): Observable<void> {
-    const transition = ngbRunTransition(
+    /*const transition = ngbRunTransition(
       this._ngZone, this._elementRef.nativeElement, ngbAlertFadingTransition,
       {animation: this.animation, runningTransition: 'continue'}
     );
-    transition.subscribe(() => this.closed.emit());
-    return transition;
+    transition.subscribe(() => this.closed.emit());*/
+    this.closed.emit()
+    return of(undefined); // transition;
   }
 
   ngOnChanges(changes: SimpleChanges) {

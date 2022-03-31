@@ -1,8 +1,8 @@
-import { inject, ComponentFixture, TestBed, tick, fakeAsync, flushMicrotasks, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, inject, TestBed, tick, waitForAsync} from '@angular/core/testing';
 
-import { AlertsComponent } from './alerts.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { By } from '@angular/platform-browser';
+import {AlertsComponent} from './alerts.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {By} from '@angular/platform-browser';
 import {AlertService, SuccessAlert} from '../../services/alert/alert.service';
 
 describe('AlertsComponent', () => {

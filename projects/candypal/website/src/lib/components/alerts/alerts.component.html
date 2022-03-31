@@ -6,8 +6,7 @@
 
 
 
-  <div
-    *ngFor="let alert of alerts" [ngClass]="alert.type" (close)="closeAlert(alert)"
+  <div *ngFor="let alert of alerts" [ngClass]="alert.type" (close)="closeAlert(alert)"
     class="alert alert-primary"
     role="alert">
     <h4> {{ alert.title }} </h4>

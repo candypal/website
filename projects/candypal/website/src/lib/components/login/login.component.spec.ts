@@ -1,13 +1,10 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {LoginComponent} from './login.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService} from '../../services/alert/alert.service';
 import {UserService} from '../../services/user/user.service';
 import {Observable, of} from 'rxjs';
 import {ReactiveFormsModule, Validators} from '@angular/forms';
-import {inject} from '@angular/core/testing';
-
-import {} from 'jasmine';
 
 describe('Logincomponent', () => {
   let component: LoginComponent;

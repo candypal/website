@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgbCarousel, NgbCarouselConfig} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCarousel} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'cfs-photos',

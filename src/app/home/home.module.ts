@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HomeComponent } from './components/home/home.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HomeComponent} from './components/home/home.component';
 import {RestaurantModule} from '../restaurant/restaurant.module';
 
 @NgModule({

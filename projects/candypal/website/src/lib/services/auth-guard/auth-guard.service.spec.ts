@@ -1,7 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { AuthGuardService } from './auth-guard.service';
-import { Router } from '@angular/router';
+import {AuthGuardService} from './auth-guard.service';
 import {UserService} from '../user/user.service';
 
 describe('AuthGuardService', () => {
