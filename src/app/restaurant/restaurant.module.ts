@@ -9,6 +9,8 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {ReviewsComponent} from './components/reviews/reviews.component';
 import {PhotosComponent} from './components/photos/photos.component';
 import {WebsiteModule} from '@candypal/website';
+import {CarouselModule} from "primeng/carousel";
+import {TagModule} from "primeng/tag";
 
 
 @NgModule({
@@ -16,9 +18,11 @@ import {WebsiteModule} from '@candypal/website';
     CommonModule,
     HttpClientModule,
     FontAwesomeModule,
+    CarouselModule,
     NgbModule,
     InfiniteScrollModule,
-    WebsiteModule
+    WebsiteModule,
+    TagModule
   ],
   declarations: [
     RestaurantsComponent,

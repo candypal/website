@@ -1,7 +1,9 @@
 <div class="container" *ngIf="reviews.length > 0">
   <h6>Reviews</h6>
-  <div class="card-deck">
-    <div class="card" *ngFor="let review of reviews">
+
+
+  <p-carousel [value]="reviews" [numVisible]="5" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+    <ng-template let-review pTemplate="item">
       <img class="card-img-top" [src]="review.profile_photo_url" alt="{{review.author_name}}">
       <div class="card-body">
         <h5 class="card-title">{{review.author_name}}</h5>
@@ -16,9 +18,11 @@
           </cfs-read-more>
         </p>
       </div>
-    </div>
-  </div>
+    </ng-template>
+  </p-carousel>
+
 </div>
+
 <ng-template #reviewRating let-fill="fill">
   <span class="star" [class.full]="fill === 100">
     <span class="half" [style.width.%]="fill">&#9734;</span>&#9733;

@@ -30,11 +30,10 @@
 
           <div class="row" *ngIf="(restaurant && restaurant.place)">
             <div class="col">
-              <span class="badge badge-warning">{{restaurant.place && restaurant.place.phone}}</span>
-              &nbsp;&nbsp;
-              <span class="badge badge-warning">
-                <a target="_blank" href="{{restaurant.place && restaurant.place.website}}">web site</a>
-              </span>
+              <p-tag class="m2" value="{{restaurant.place && restaurant.place.phone}}" icon="pi pi-phone"></p-tag>
+              <a class="m-2" target="_blank" href="{{restaurant.place && restaurant.place.website}}">
+                <p-tag value="Website" icon="pi pi-globe"></p-tag>
+              </a>
             </div>
           </div>
 
@@ -85,11 +84,10 @@
       <cfs-photos *ngIf="(restaurant && restaurant.place)" [photos]="restaurant.place.photos"></cfs-photos>
       <cfs-reviews *ngIf="(restaurant && restaurant.place)" [reviews]="restaurant.place.reviews"></cfs-reviews>
 
-      <div class="row d-flex justify-content-start">
-        <button class="btn btn-warning" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">More details
-        </button>
-        <button class="btn btn-warning" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Order</button>
-        <button class="btn btn-warning" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Call</button>
+      <div class="d-flex" style="align-items: stretch;">
+        <button class="btn btn-success m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">More details</button>
+        <button class="btn btn-warning m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Order</button>
+        <button class="btn btn-failure m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Call</button>
       </div>
     </div>
   </div>

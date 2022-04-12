@@ -1,14 +1,12 @@
 <div class="container" *ngIf="photos.length > 0">
   <h6>Photos</h6>
 
-  <div class="card">
-    <div class="card-body">
-      <ul class="list-inline">
-        <li class="list-inline-item" *ngFor="let photo of photos">
-          <img src="{{photo.url}}" class="img-fluid rounded" alt="Restaurant photo">
-        </li>
-      </ul>
-    </div>
-  </div>
+
+  <p-carousel [value]="photos" [numVisible]="5" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+    <ng-template let-photo pTemplate="item">
+      <img src="{{photo.url}}" class="img-fluid rounded" alt="Restaurant photo">
+    </ng-template>
+  </p-carousel>
+
 
 </div>
