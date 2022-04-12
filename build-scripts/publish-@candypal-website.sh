@@ -18,7 +18,7 @@ npm version patch
 cd ../../..
 pwd
 
-ng build @candypal/website --prod
+ng build @candypal/website
 echo "Library build done..."
 # npm run @candypal/website-schematics
 echo "Schematics build done..."

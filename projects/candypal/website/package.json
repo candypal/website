@@ -1,6 +1,9 @@
 {
   "name": "@candypal/website",
-  "version": "0.0.1",
+  "version": "0.0.5",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "peerDependencies": {
     "@angular/common": "^13.0.0",
     "@angular/core": "^13.0.0",

@@ -7,6 +7,7 @@ import {
   CfsInfiniteScrollService,
   ChangeLocationModelComponent,
   Footer,
+  // google,
   Header,
   HeaderService,
   MapService,
@@ -15,6 +16,7 @@ import {
 } from '@candypal/website';
 import {Router} from '@angular/router';
 import {DOCUMENT} from "@angular/common";
+import {environment} from "../../../environments/environment";
 
 
 export declare var google: any;
@@ -46,13 +48,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     private router: Router,
     private mapService: MapService,
     private modalService: NgbModal,
-    private changeDetectorRef: ChangeDetectorRef,
     private cfsInfiniteScrollService: CfsInfiniteScrollService,
     private userService: UserService,
     private headerService: HeaderService,
     private alertService: AlertService,
     @Inject(DOCUMENT) private document: Document,
-    private renderer2: Renderer2
   ) {
 
     // Login users when user submit the email and password
@@ -225,69 +225,41 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-
-    const url = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBMIoVYsqVdrlm_IwdKSkLEhpMH7JtEIT8';
-    this.loadScript(url).then((mapLoaded: any) => {
-      console.log('the map loaded successfully %o', mapLoaded);
-
-      // load the google map in UI
-      const mapProp = {
-        center: new google.maps.LatLng(18.5793, 73.8143),
-        zoom: 2,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      this.map = new google.maps.Map(document.getElementById('map'), mapProp);
-      this.mapService.map = this.map;
-
-      // gets the coordinates from the browser and address from google map. this happens first time
-      this.mapService.getBrowserCoordinates({}).subscribe({
-        next: (position: any) => {
-          this.coordinates = position && position.coords;
-          this.mapService.getAddressFromCoordinates({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }).subscribe({
-            next: (location: any) => {
-              this.header.middleButton = {
-                display: true,
-                label: location.formatted_address,
-                loading: false
-              };
-              this.changeDetectorRef.detectChanges();
-              this._getRestaurantsFromMap(location);
-            },
-            error: (error: any) => {
-              this.header.middleButton = {
-                display: true,
-                label: 'select location here.',
-                loading: false
-              };
-            }
-          });
-        },
-        error: (error: any) => {
-          this.header.middleButton = {
-            display: true,
-            label: 'select location here.',
-            loading: false
-          };
-        }
-      });
-
-
-      // loading restaurant on change of address
-      this.mapService.locationBehaviorSubject.subscribe((location: any) => {
-        this.location = location;
-        this.restaurantService.restaurants = [];
+    // Load the google map service and get address
+    const url = 'https://maps.googleapis.com/maps/api/js?key=' + environment.mapApiKey + '&libraries=places';
+    // &callback=initMap';
+    this.mapService.loadGoogleMapAndGetAddress(url).subscribe({
+      next: (location: any) => {
+        this.header.middleButton = {
+          display: true,
+          label: location.formatted_address,
+          loading: false
+        };
+        // this.changeDetectorRef.detectChanges();
         this._getRestaurantsFromMap(location);
-      });
-
-      // loading restaurants on autoscroll
-      this.cfsInfiniteScrollService.scrolledBehaviorSubject.subscribe((position: any) => {
-        this.restaurantService.getRestaurants(this.location);
-      });
-
+      },
+      error: (error: any) => {
+        this.header.middleButton = {
+          display: true,
+          label: '[ERR] Select location here.',
+          loading: false
+        };
+      }
     });
+
+
+    // loading restaurant on change of address
+    this.mapService.locationBehaviorSubject.subscribe((location: any) => {
+      this.location = location;
+      this.restaurantService.restaurants = [];
+      this._getRestaurantsFromMap(location);
+    });
+
+    // loading restaurants on autoscroll
+    this.cfsInfiniteScrollService.scrolledBehaviorSubject.subscribe((position: any) => {
+      this.restaurantService.getRestaurants(this.location);
+    });
+
   }
 
   ngAfterViewInit() {
@@ -317,7 +289,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.mapService.getRestaurantsFromGoogleMap(location).subscribe((restaurants: any) => {
       console.log('restaurants from map', restaurants);
       this.restaurantService.restaurants = [...restaurants];
-      this.changeDetectorRef.detectChanges();
       const request = {
         location: [location],
         restaurant: restaurants
@@ -327,21 +298,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('Error while storing fetched restaurants from google map! error: %o ', error);
       });
     });
-  }
-
-
-  private loadScript(url: string) {
-    return new Promise((resolve, reject) => {
-      const script = this.renderer2.createElement('script');
-      script.type = 'text/javascript';
-      script.src = url;
-      script.text = ``;
-      script.async = true;
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      this.renderer2.appendChild(this.document.body, script);
-    })
   }
 
 }

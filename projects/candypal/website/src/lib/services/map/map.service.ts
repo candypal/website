@@ -1,6 +1,8 @@
-import {ElementRef, EventEmitter, Injectable, NgZone} from '@angular/core';
+import {ElementRef, EventEmitter, Inject, Injectable, NgZone, Renderer2, RendererFactory2} from '@angular/core';
 import {Observable, Subject, Subscriber} from 'rxjs';
+import {DOCUMENT} from "@angular/common";
 
+export declare var google: any;
 
 const GEOLOCATION_ERRORS = {
   'errors.location.unsupportedBrowser': 'Browser does not support location services',
@@ -9,6 +11,18 @@ const GEOLOCATION_ERRORS = {
   'errors.location.timeout': 'Service timeout has been reached'
 };
 
+export interface GoogleLocation {
+  [x: string]: any;
+  address_components: any;
+  geometry: {
+    location: {
+      lat: () => any;
+      lng: () => any;
+    };
+  };
+  photos: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +30,7 @@ export class MapService {
 
   public coordinates: any | undefined;
   public map: any;
+  public placeService: any;
   public geocoder: { geocode: (arg0: { latLng: any; }, arg1: (results: any[], status: string) => void) => void; } | undefined;
   public latLng: any;
   public location: Observable<any> | undefined;
@@ -23,10 +38,15 @@ export class MapService {
   public coordinatesBehaviorSubject = new Subject<any>();
   public type = 'restaurant';
   public keyword = 'restaurant';
+  public mapPlace: any;
+  private renderer: Renderer2;
 
   constructor(
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    @Inject(DOCUMENT) private document: Document,
+    private rendererFactory: RendererFactory2
   ) {
+    this.renderer = rendererFactory.createRenderer(null, null);
   }
 
   public getBrowserCoordinates(opts: PositionOptions | undefined): Observable<any> {
@@ -64,10 +84,12 @@ export class MapService {
 
   public getAddressFromCoordinates(latLngValue: { latitude: any; longitude: any; }) {
     return new Observable(observer => {
-      this.geocoder = this.geocoder || (<any>window).google.maps.Geocoder();
-      this.latLng = this.latLng || (<any>window).google.maps.LatLng(latLngValue.latitude, latLngValue.longitude);
+      console.log('getAddressFromCoordinates: %o', this.map);
+      console.log('getAddressFromCoordinates: %o', new google.maps.Geocoder());
+      this.geocoder = this.geocoder || new google.maps.Geocoder();
+      this.latLng = this.latLng || new google.maps.LatLng(latLngValue.latitude, latLngValue.longitude);
       this.geocoder && this.geocoder.geocode({'latLng': this.latLng}, (results: any[], status: string) => {
-        if (status === (<any>window).google.maps.GeocoderStatus.OK) {
+        if (status === google.maps.GeocoderStatus.OK) {
           const newLocation: any = this.processFullLocation(results[0]);
           newLocation.latitude = latLngValue.latitude;
           newLocation.longitude = latLngValue.longitude;
@@ -82,7 +104,55 @@ export class MapService {
     });
   }
 
+  public loadGoogleMapAndGetAddress(url: string): Observable<any> {
+    return new Observable(observer => {
+      this.loadScript(url).then((mapLoaded: any) => {
+        console.log('the map loaded successfully %o', mapLoaded);
+        // gets the coordinates from the browser and address from google map. this happens first time
+        this.getBrowserCoordinates({})
+          .subscribe({
+            next: (position) => {
+              this.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              const mapProp = {
+                center: this.latLng,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+              };
+              this.map = new google.maps.Map(document.getElementById('map'), mapProp);
+              this.map = this.map;
+              this.coordinates = position && position.coords;
+              return this.getAddressFromCoordinates({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              }).subscribe({
+                next: (address) => {
+                  observer.next(address);
+                  observer.complete();
+                },
+                error: (error) => {
+                  observer.error({
+                    desc: 'Unable to get address from coordinates',
+                    error: error
+                  });
+                }
+              });
+            },
+            error: (error) => {
+              observer.error({
+                desc: 'Unable to get browser coordinates',
+                error: error
+              });
+            }
+          });
 
+      });
+    });
+  }
+
+  /**
+   * Take user coordinates and return around 20 nearby restaurants
+   * @param userLocation
+   */
   public getRestaurantsFromGoogleMap(userLocation: { latitude: any; longitude: any; }) {
     console.log('getRestaurantsFromGoogleMap|this.map: %o', this.map);
     return new Observable(observer => {
@@ -98,11 +168,11 @@ export class MapService {
 
       const mapOptions: any = {
         zoom: 8,
-        center: new (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude),
-        mapTypeId: (<any>window).google.maps.MapTypeId.ROADMAP
+        center: new google.maps.LatLng(userLocation.latitude, userLocation.longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-      console.log('getRestaurantsFromGoogleMap: %o', (<any>window).google.maps);
-      const places = new (<any>window).google.maps.places.PlacesService(this.map);
+      // make sure you added place service in your google map url (&libraries=places&callback=initMap)
+      this.placeService = new google.maps.places.PlacesService(this.map);
       if (keyword) {
         search.keyword = keyword;
       }
@@ -111,10 +181,10 @@ export class MapService {
 
       if (rankBy === 'distance' && (search.types || search.keyword)) {
         // search.rankBy = (<any>window).google.maps.places.RankBy.DISTANCE;
-        search.location = (<any>window).google.maps.LatLng(userLocation.latitude, userLocation.longitude);
-        const centerMarker = (<any>window).google.maps.Marker({
+        search.location = this.latLng;
+        const centerMarker = new google.maps.Marker({
           position: search.location,
-          animation: (<any>window).google.maps.Animation.DROP,
+          animation: google.maps.Animation.DROP,
           map: this.map
         });
       } else {
@@ -124,8 +194,8 @@ export class MapService {
       search.location = {lat: userLocation.latitude, lng: userLocation.longitude};
       search.radius = '10000';
 
-      places.nearbySearch(search, (results: string | any[], status: any) => {
-        if (status === (<any>window).google.maps.places.PlacesServiceStatus.OK) {
+      this.placeService.nearbySearch(search, (results: string | any[], status: any) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
             const location = results[i].vicinity.split(',');
 
@@ -145,6 +215,14 @@ export class MapService {
               city: location[location.length - 1]
             };
             restaurants.push(restaurant);
+
+            const marker = new google.maps.Marker({
+              position: new google.maps.LatLng(restaurant.latitude, restaurant.longitude),
+              title:"Hello World!"
+            });
+
+            // To add the marker to the map, call setMap();
+            marker.setMap(this.map);
           }
           observer.next(restaurants);
         } else {
@@ -161,10 +239,9 @@ export class MapService {
   public getGoogleMapPlaceDetail(googlePlaceId: any) {
     return new Observable(observer => {
       // console.log('getGoogleMapPlaceDetail|parameter:%o', googlePlaceId);
-      const places = (<any>window).google.maps.places.PlacesService(this.map) as any;
-      places.getDetails({placeId: googlePlaceId}, function (place: any, status: string) {
+      this.placeService.getDetails({placeId: googlePlaceId}, function (place: any, status: string) {
         console.log('MapService|place-detail: %o | status:%o', place, status);
-        if (status === (<any>window).google.maps.places.PlacesServiceStatus.OK) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
 
           if (typeof place.international_phone_number !== 'undefined') {
             place.phone = place.international_phone_number;
@@ -173,7 +250,6 @@ export class MapService {
           } else {
             place.phone = '+14156509102';
           }
-
           observer.next(place);
         } else {
           console.log('Unable to get phone number, email, url, website from google. error: %o', status);
@@ -187,33 +263,34 @@ export class MapService {
   public getGoogleMapPhotos(googlePlaceId: string) {
     return new Observable(observer => {
       // console.log('getGoogleMapPlaceDetail|parameter:%o', googlePlaceId);
-      const map = (<any>window).google.maps.Map(document.getElementById('map-canvas'));
-      const places = (<any>window).google.maps.places.PlacesService(map);
-      places.getDetails({placeId: googlePlaceId}, function (place: { international_phone_number: any; formatted_phone_number: any; place_id: any; website: any; url: any; }, status: string) {
-        console.log('mapService|fetched from map|place::::%o and status: %o', place, status);
-        if (status === (<any>window).google.maps.places.PlacesServiceStatus.OK) {
-          let phone;
+      // const map = new google.maps.Map(document.getElementById('map-canvas'));
+      const places = google.maps.places.PlacesService(this.map);
+      places.getDetails({placeId: googlePlaceId},
+        function (place: { international_phone_number: any; formatted_phone_number: any; place_id: any; website: any; url: any; }, status: string) {
+          console.log('mapService|fetched from map|place::::%o and status: %o', place, status);
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            let phone;
 
-          if (typeof place.international_phone_number !== 'undefined') {
-            phone = place.international_phone_number;
-          } else if (typeof place.formatted_phone_number !== 'undefined') {
-            phone = place.formatted_phone_number;
+            if (typeof place.international_phone_number !== 'undefined') {
+              phone = place.international_phone_number;
+            } else if (typeof place.formatted_phone_number !== 'undefined') {
+              phone = place.formatted_phone_number;
+            } else {
+              phone = '+1 415 650 9102';
+            }
+
+            const restro = {
+              place_id: place.place_id,
+              phone: phone,
+              website: place.website,
+              url: place.url
+            };
+            observer.next(restro);
           } else {
-            phone = '+1 415 650 9102';
+            console.log('Unable to get phone number, email, url, website from google. error: %o', status);
+            observer.error('Unable to get phone number, email, url, website from google. error:' + status);
           }
-
-          const restro = {
-            place_id: place.place_id,
-            phone: phone,
-            website: place.website,
-            url: place.url
-          };
-          observer.next(restro);
-        } else {
-          console.log('Unable to get phone number, email, url, website from google. error: %o', status);
-          observer.error('Unable to get phone number, email, url, website from google. error:' + status);
-        }
-      });
+        });
     });
   }
 
@@ -251,7 +328,7 @@ export class MapService {
   public autoComplete(searchElementRef: ElementRef | undefined, output: EventEmitter<string>) {
 
     if (searchElementRef) {
-      const autoComplete = (<any>window).google.maps.places.Autocomplete(searchElementRef.nativeElement, {
+      const autoComplete = new google.maps.places.Autocomplete(searchElementRef.nativeElement, {
         types: ['address']
       });
 
@@ -277,46 +354,65 @@ export class MapService {
 
   public storeAndUpdateRestaurantsManual(userLocation: { latitude: any; longitude: any; }) {
     return new Observable((subscriber: Subscriber<object>) => {
-      this.getRestaurantsFromGoogleMap(userLocation).subscribe((userNearbyRestaurants: any) => {
-        console.log('storeAndUpdateRestaurantsManual|userNearbyRestaurants:%o', userNearbyRestaurants);
-        for (let i = 0; i < userNearbyRestaurants.restaurant.length; i++) {
-          // $rootScope.restaurant.items.splice(0, 0, userNearbyRestaurants.restaurant[i]);
-          // console.log("map restaurant added:%0", userNearbyRestaurants.restaurant[i]);
+      this.getRestaurantsFromGoogleMap(userLocation).subscribe({
+        next: (userNearbyRestaurants: any) => {
+          console.log('storeAndUpdateRestaurantsManual|userNearbyRestaurants:%o', userNearbyRestaurants);
+          for (let i = 0; i < userNearbyRestaurants.restaurant.length; i++) {
+            // $rootScope.restaurant.items.splice(0, 0, userNearbyRestaurants.restaurant[i]);
+            // console.log("map restaurant added:%0", userNearbyRestaurants.restaurant[i]);
+          }
+          subscriber.next(userNearbyRestaurants);
+          /*this.httpClient.post('restaurant/addList', userNearbyRestaurants).sunscribe( (results) => {
+            observer.resolve(results.data);
+          }, (error) => {
+            console.log('Error while storing fetched restaurants from google map! :: ' + error);
+            observer.reject(error);
+          });*/
+        }, error: (error: any) => {
+          subscriber.next(error);
         }
-        subscriber.next(userNearbyRestaurants);
-        /*this.httpClient.post('restaurant/addList', userNearbyRestaurants).sunscribe( (results) => {
-          observer.resolve(results.data);
-        }, (error) => {
-          console.log('Error while storing fetched restaurants from google map! :: ' + error);
-          observer.reject(error);
-        });*/
-      }, (error: any) => {
-        subscriber.next(error);
       });
     });
   }
 
-  public processFullLocation(googleLocation: { [x: string]: any; address_components: any; geometry: { location: { lat: () => any; lng: () => any; }; }; photos: any; }) {
-    const candifoodLocation = {} as any;
+  public processFullLocation(googleLocation: GoogleLocation) {
+    const location = {} as any;
     const gAddress = googleLocation.address_components;
     for (const prop in googleLocation) {
       if (typeof googleLocation[prop] === 'string') {
-        candifoodLocation[prop] = googleLocation[prop];
+        location[prop] = googleLocation[prop];
       }
     }
 
-    candifoodLocation['latitude'] = googleLocation.geometry.location.lat();
-    candifoodLocation['longitude'] = googleLocation.geometry.location.lng();
+    location['latitude'] = googleLocation.geometry.location.lat();
+    location['longitude'] = googleLocation.geometry.location.lng();
 
     for (let i = 0; i < gAddress.length; i++) {
-      candifoodLocation[gAddress[i].types[0]] = String(gAddress[i].long_name).trim();
+      location[gAddress[i].types[0]] = String(gAddress[i].long_name).trim();
     }
     if (typeof googleLocation.photos === 'object') {
       for (const photo in googleLocation.photos) {
 
       }
     }
-    return candifoodLocation;
+    return location;
   }
+
+
+  public loadScript(url: string) {
+    return new Promise((resolve, reject) => {
+      const script = this.renderer.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+      script.text = ``;
+      script.async = true;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      // script.appendChild(this.document.head)
+      this.renderer.appendChild(this.document.body, script);
+    })
+  }
+
 
 }

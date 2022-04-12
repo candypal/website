@@ -10,6 +10,7 @@ export const environment = {
   trackAnalytics: true,
   useBasicAuth: false,
   alertDelayInSeconds: 7,
+  mapApiKey: 'AIzaSyBMIoVYsqVdrlm_IwdKSkLEhpMH7JtEIT8',
   'ga': {
     'key': 'tempPwd',
     'iv': 'XXXX',
