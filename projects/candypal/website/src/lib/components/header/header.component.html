@@ -2,65 +2,93 @@
 
   <cfs-alerts></cfs-alerts>
 
+  <div class="collapse" id="navbarToggleExternalContent"
+       *ngIf="header?.navbarToggleExternalContent"
+       [ngStyle]="header?.navbarToggleExternalContent?.style"
+       [ngbCollapse]="isCollapsed">
+    <div class="p-4"
+         [ngStyle]="header?.navbarToggleExternalContent?.style">
+      <h5
+        *ngIf="header?.navbarToggleExternalContent?.header"
+        class="text-white h4">
+        {{header?.navbarToggleExternalContent?.header}}
+      </h5>
+      <span
+        *ngIf="header?.navbarToggleExternalContent?.content"
+        class="text-muted">{{header?.navbarToggleExternalContent?.content}}
+      </span>
+    </div>
+  </div>
+
   <div class="container" [ngStyle]="header.style">
 
     <nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center" [ngStyle]="header.style">
 
-      <a [routerLink]="header?.brand?.url" class="navbar-header.brand d-flex w-25 mr-auto" [ngStyle]="header?.brand?.style">
+      <div class="container-fluid">
+        <a [routerLink]="header?.brand?.url" class="navbar-brand d-flex w-25 mr-auto" [ngStyle]="header?.brand?.style">
 
         <span class="brand-image" [ngStyle]="header?.brand?.brandImage?.style">
           <img *ngIf="header?.brand?.brandImage?.logo && header?.brand?.brandImage?.logo?.imageInAsset"
                src="/assets/{{header?.brand?.brandImage?.logo?.imageInAsset}}" class="d-inline-block align-top"
-               width="{{header?.brand?.brandImage?.logo?.width || 30}}" height="{{header?.brand?.brandImage?.logo?.height || 30}}"
-               alt="{{header?.brand?.brandImage?.logo?.alt || header?.brand?.label}}" [ngStyle]="header?.brand?.brandImage?.logo?.style"/>
+               width="{{header?.brand?.brandImage?.logo?.width || 30}}"
+               height="{{header?.brand?.brandImage?.logo?.height || 30}}"
+               alt="{{header?.brand?.brandImage?.logo?.alt || header?.brand?.label}}"
+               [ngStyle]="header?.brand?.brandImage?.logo?.style"/>
         </span>
 
-        <span class="brand-text" [ngStyle]="header?.brand?.brandText?.style">{{header?.brand?.label}}</span>
-      </a>
+          <span class="brand-text" [ngStyle]="header?.brand?.brandText?.style">{{header?.brand?.label}}</span>
+        </a>
 
+        <button
+          class="navbar-toggler" type="button" data-toggle="collapse"
+          data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent"
+          data-target="#candifoodtoggle" aria-expanded="false" aria-label="Toggle navigation"
+          aria-controls="candifoodtoggle"
+          (click)="isCollapsed = !isCollapsed;"
+          [attr.aria-bs-expanded]="!isCollapsed"
+          [attr.aria-expanded]="!isCollapsed"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <!-- Middle section of the header -->
-      <button
-        class="navbar-toggler btn btn-outline-primary" type="button" data-toggle="collapse"
-        data-target="#candifoodtoggle" aria-expanded="false" aria-label="Toggle navigation"
-        (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="candifoodtoggle">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+        <div class="navbar-collapse collapse w-100" id="candifoodtoggle" [ngbCollapse]="isCollapsed">
 
-      <div class="navbar-collapse collapse w-100" id="candifoodtoggle" [ngbCollapse]="isCollapsed">
+          <!-- Left link section of the header -->
+          <ul *ngIf="header?.links?.leftLinks" class="nav navbar-nav ml-auto w-100 justify-content-start">
+            <li class="nav-item" *ngFor="let link of header?.links?.leftLinks"
+                [ngStyle]="header && header?.links && header?.links?.style">
+              <a class="nav-link" [routerLink]="link.url" routerLinkActive="active"
+                 [ngStyle]="header && header?.links && header?.links?.style">
+                {{link.label}}
+              </a>
+            </li>
+          </ul>
 
-        <ul *ngIf="header?.links?.leftLinks" class="nav navbar-nav ml-auto w-100 justify-content-start">
-          <li class="nav-item" *ngFor="let link of header?.links?.leftLinks"
-              [ngStyle]="header && header?.links && header?.links?.style">
-            <a class="nav-link" [routerLink]="link.url" routerLinkActive="active"
-               [ngStyle]="header && header?.links && header?.links?.style">
-              {{link.label}}
-            </a>
-          </li>
-        </ul>
+          <!-- Middle section of the header -->
+          <ul class="navbar-nav w-100 justify-content-center">
+            <li class="nav-item active" *ngIf="header?.middleButton && header?.middleButton?.display">
+              <button type="button" class="btn btn-warning ng-binding street-button"
+                      [ngStyle]="header?.middleButton?.style" (click)="open()">
+                <fa-icon [hidden]="header?.middleButton?.loading" [icon]="faStreetView"></fa-icon>
+                <fa-icon [hidden]="!header?.middleButton?.loading" [icon]="faUtensilSpoon" [spin]="true"></fa-icon>
+                {{location.formatted_address || header?.middleButton?.label}}
+              </button>
+            </li>
+          </ul>
 
-        <ul class="navbar-nav w-100 justify-content-center">
-          <li class="nav-item active" *ngIf="header?.middleButton && header?.middleButton?.display">
-            <button type="button" class="btn btn-warning ng-binding street-button"
-                    [ngStyle]="header?.middleButton?.style" (click)="open()">
-              <fa-icon [hidden]="header?.middleButton?.loading" [icon]="faStreetView"></fa-icon>
-              <fa-icon [hidden]="!header?.middleButton?.loading" [icon]="faUtensilSpoon" [spin]="true"></fa-icon>
-              {{location.formatted_address || header?.middleButton?.label}}
-            </button>
-          </li>
-        </ul>
+          <!-- Right link section of the header -->
+          <ul *ngIf="header?.links?.rightLinks" class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <li class="nav-item" *ngFor="let link of header?.links?.rightLinks"
+                [ngStyle]="header && header?.links && header?.links?.style || ''">
+              <a [routerLink]="link.url" routerLinkActive="active"
+                 [ngStyle]="header && header?.links && header?.links?.style || ''">
+                {{link.label}}
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <ul *ngIf="header?.links?.rightLinks" class="nav navbar-nav ml-auto w-100 justify-content-end">
-          <li class="nav-item" *ngFor="let link of header?.links?.rightLinks"
-              [ngStyle]="header && header?.links && header?.links?.style || ''">
-            <a [routerLink]="link.url" routerLinkActive="active"
-               [ngStyle]="header && header?.links && header?.links?.style || ''">
-              {{link.label}}
-            </a>
-          </li>
-        </ul>
       </div>
-
     </nav>
 
   </div>

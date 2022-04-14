@@ -1,6 +1,6 @@
 {
   "name": "@candypal/website",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

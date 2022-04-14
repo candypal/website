@@ -10,7 +10,8 @@ export class ReadMoreComponent implements OnChanges {
   @Input() text: string = '';
   @Input() maxLength = 100;
   @Input() hideLink: boolean = false;
-  @Input() linkLabel: string | undefined;
+  @Input() showLinkLabel: string | undefined;
+  @Input() hideLinkLabel: string | undefined;
   public currentText: string = '';
   public hideToggle = true;
 

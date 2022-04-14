@@ -112,6 +112,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
 
     this.header = {
+      navbarToggleExternalContent: {
+        header: 'New promotion',
+        content: 'Order from any restaurant and tell men about Candyfood to get 5% discount',
+        style: {
+          'color': '#ff00ff',
+          'border': '1px solid red'
+        }
+      },
       brand: {
         label: 'candifood',
         url: '/',
