@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User, UserService} from '../../services/user/user.service';
 import {AlertService} from '../../services/alert/alert.service';
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 
   @Output() loginSubmitClicked = new EventEmitter<User>();
   public loading = false;
-  public loginForm: FormGroup;
+  public loginForm: UntypedFormGroup;
   public email: AbstractControl;
   public password: AbstractControl;
   public returnUrl: string = '/';
@@ -24,9 +24,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
+    this.loginForm = new UntypedFormGroup({
+      email: new UntypedFormControl('', [Validators.required]),
+      password: new UntypedFormControl('', [Validators.required])
     });
     this.email = this.loginForm.controls['email'];
     this.password = this.loginForm.controls['password'];

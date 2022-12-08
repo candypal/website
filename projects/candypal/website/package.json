@@ -1,13 +1,13 @@
 {
   "name": "@candypal/website",
-  "version": "0.0.7",
+  "version": "14.0.1",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "@angular/common": "^13.0.0",
-    "@angular/core": "^13.0.0",
-    "@angular/google-maps": "^13.0.0",
+    "@angular/common": "^14.0.0",
+    "@angular/core": "^14.0.0",
+    "@angular/google-maps": "^14.0.0",
     "rxjs": "^7.5.5",
     "bootstrap": "^5.0.0",
     "@types/bootstrap": "^5.0.13"

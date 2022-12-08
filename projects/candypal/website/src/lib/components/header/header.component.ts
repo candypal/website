@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {faStreetView, faUtensilSpoon} from '@fortawesome/free-solid-svg-icons';
 import {Brand, Header, HeaderService, Link, Logo, MiddleButton} from '../../services/header/header.service';
 import {Subscription} from "rxjs";
@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   public isCollapsed = true;
   public location: any = [];
-  public searchForm: FormGroup;
+  public searchForm: UntypedFormGroup;
   private term: AbstractControl;
   public loading: boolean = false;
 
@@ -42,8 +42,8 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private headerService: HeaderService) {
 
-    this.searchForm = new FormGroup({
-      term: new FormControl('', [Validators.required]),
+    this.searchForm = new UntypedFormGroup({
+      term: new UntypedFormControl('', [Validators.required]),
     });
     this.term = this.searchForm.controls['term'];
 
