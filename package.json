@@ -52,7 +52,7 @@
     "@storybook/addon-links": "7.5.3",
     "@storybook/angular": "7.5.3",
     "@storybook/blocks": "7.5.3",
-    "@storybook/testing-library": "^0.2.2",
+    "@storybook/testing-library": "0.2.2",
     "@types/bootstrap": "5.2.6",
     "@types/googlemaps": "3.43.3",
     "@types/jasmine": "4.3.2",
