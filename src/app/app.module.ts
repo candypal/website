@@ -1,12 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './components/app/app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './components/app/app.component';
 import {WebsiteModule} from "@candypal/website";
+import {HomeModule} from "./home/home.module";
+import {RestaurantModule} from "./restaurant/restaurant.module";
+import {NgbRatingModule} from "@ng-bootstrap/ng-bootstrap";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -14,13 +16,19 @@ import {WebsiteModule} from "@candypal/website";
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
-    NgbModule,
-    FontAwesomeModule,
-    WebsiteModule
+    WebsiteModule.forRoot({
+      restUrl: environment.restUrl,
+      loginUrl: environment.restUrl + '/authentication/login',
+      alertDelayInSeconds: 7
+    }),
+    HomeModule,
+    RestaurantModule,
+    NgbRatingModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

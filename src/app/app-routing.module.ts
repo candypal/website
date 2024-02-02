@@ -1,12 +1,17 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {HomeComponent} from "./home/components/home/home.component";
+import {RestaurantsComponent} from "./restaurant/components/restaurants/restaurants.component";
 import {AuthGuardService, LoginComponent, PrivacyComponent, ProfileComponent} from "@candypal/website";
-import {DashboardComponent} from "./modules/dashboard/components/dashboard/dashboard.component";
 
 const routes: Routes = [
   {
-    path: '/',
-    component: DashboardComponent,
+    path: '',
+    component: HomeComponent
+  },
+  {
+    path: 'restaurant',
+    component: RestaurantsComponent
   },
   {
     path: 'privacy',
@@ -29,5 +34,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

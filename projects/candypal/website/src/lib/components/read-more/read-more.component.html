@@ -1,7 +1,7 @@
 <div>
   <span [innerHTML]="currentText"></span>
-  <a href="javascript:void(0);" [class.hidden]="hideToggle" *ngIf="!hideLink" (click)="toggleView()">
-    {{isCollapsed ? linkLabel : 'hide'}}
+  <a href="javascript:void(0);" [hidden]="hideToggle" *ngIf="!hideLink" (click)="toggleView()">
+    {{isCollapsed ? (showLinkLabel?showLinkLabel:'show') : (hideLinkLabel?hideLinkLabel:'mm')}}
   </a>
 </div>
 

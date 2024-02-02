@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, Observable} from 'rxjs';
 
-export function appInitFactory(init: AppInitService): () => Promise<any> {
-  return () => init.load().toPromise();
+export function appInitFactory(init: AppInitService): () => Observable<any> {
+  return () => init.load();
 }
 
 @Injectable({
@@ -15,7 +14,7 @@ export class AppInitService {
   }
 
   public load(): Observable<any> {
-    return Observable.create()
+    return new Observable<any>()
       .pipe(
         map((res) => {
           // can run other app initializations here that must be run after the config has been loaded

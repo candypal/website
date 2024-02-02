@@ -1,0 +1,12 @@
+<div class="container" *ngIf="photos.length > 0">
+  <h6>Photos</h6>
+
+
+  <p-carousel [value]="photos" [numVisible]="5" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+    <ng-template let-photo pTemplate="item">
+      <img src="{{photo.url}}" class="img-fluid rounded" alt="Restaurant photo">
+    </ng-template>
+  </p-carousel>
+
+
+</div>

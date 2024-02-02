@@ -1,0 +1,16 @@
+.container {
+  .card {
+    margin-right: 3px;
+    margin-left: 3px;
+  }
+  .full {
+    color: #ff9e12;
+  }
+
+  .half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: #ff9e12;
+  }
+}

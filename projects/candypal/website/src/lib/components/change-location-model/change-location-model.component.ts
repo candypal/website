@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {MapService} from '../../services/map/map.service';
 import {faStreetView, faUtensilSpoon} from '@fortawesome/free-solid-svg-icons';
@@ -12,8 +12,8 @@ import {faStreetView, faUtensilSpoon} from '@fortawesome/free-solid-svg-icons';
 })
 export class ChangeLocationModelComponent implements OnInit {
 
-  public searchForm: FormGroup = new FormGroup({
-    location: new FormControl()
+  public searchForm: UntypedFormGroup = new UntypedFormGroup({
+    location: new UntypedFormControl()
   });
 
   @ViewChild('search', {static: true}) public search: ElementRef | undefined;

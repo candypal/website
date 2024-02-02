@@ -13,11 +13,9 @@ import {
 // import * as ts from 'typescript';
 import {addPackageJsonDependency, NodeDependency, NodeDependencyType} from '@schematics/angular/utility/dependencies';
 import {NodePackageInstallTask} from '@angular-devkit/schematics/tasks';
-import {getWorkspace} from '@schematics/angular/utility/config';
-import {getProject} from '@schematics/angular/utility/project';
-import {getProjectMainFile} from '@angular/cdk/schematics';
 import {getAppModulePath} from '@schematics/angular/utility/ng-ast-utils';
 import {setupOptions} from '../website';
+import {getWorkspace} from "@angular/cli/utilities/config";
 
 export class WebsiteUtil {
 
@@ -55,8 +53,8 @@ export class WebsiteUtil {
   addModuleToImports(tree: Tree, options: any): Rule {
     return (host: Tree, context: SchematicContext) => {
       let project: any;
-      const workspace = getWorkspace(host);
-      project = getProject(workspace, options.project ? options.project : Object.keys(workspace['projects'])[0]);
+      const workspace = getWorkspace();
+      // project = getProject(workspace, options.project ? options.project : Object.keys(workspace['projects'])[0]);
       /*project = getProjectFromWorkspace(
         workspace,
         // Takes the first project in case it's not provided by CLI
@@ -69,7 +67,7 @@ export class WebsiteUtil {
         '});';
 
 
-      const modulePath = getAppModulePath(host, getProjectMainFile(project));
+      const modulePath = getAppModulePath(host, '/src/components/');
       const text = host.read(modulePath);
       context.logger.log('info', '' + text);
       // const source = ts.createSourceFile(modulePath, text.toString('utf-8'), ts.ScriptTarget.Latest, true);

@@ -1,0 +1,102 @@
+<div class="list-restaurant"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [immediateCheck]="true"
+     (scrolled)="onScroll($event)">
+
+  <cfs-content-loading [hidden]="restaurantService.restaurants.length > 0" [repeats]="5"></cfs-content-loading>
+
+  <div class="card" *ngFor="let restaurant of restaurantService.restaurants; let i = index;">
+
+    <div class="card-body">
+
+      <div class="row d-flex justify-content-between">
+
+        <div class="col-10">
+          <div class="row">
+            <div class="col-md-1">
+              <fa-icon [icon]="faUtensils" [size]="'5x'" [styles]="{color:'#F36F24'}"></fa-icon>
+            </div>
+
+            <div class="col-md-7 ng-scope restaurant-details">
+              <h4 class="ng-binding">{{restaurant.name}}</h4>
+              <p class="ng-binding">{{restaurant.address}}, {{restaurant.city}}</p>
+              <p class="card-text">Time: {{restaurant.openTime}} - {{restaurant.closeTime}}</p>
+              <ngb-rating [(rate)]="restaurant.rating" [starTemplate]="restRating" [readonly]="true"
+                          [max]="5"></ngb-rating>
+            </div>
+
+          </div>
+
+          <div class="row" *ngIf="(restaurant && restaurant.place)">
+            <div class="col">
+              <p-tag class="m2" value="{{restaurant.place && restaurant.place.phone}}" icon="pi pi-phone"></p-tag>
+              <a class="m-2" target="_blank" href="{{restaurant.place && restaurant.place.website}}">
+                <p-tag value="Website" icon="pi pi-globe"></p-tag>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-2 d-flex justify-content-end">
+
+          <!--// These are default types, so not provided icons for them-->
+          <!--<fa-icon [icon]="faGlassMartini" [size]="'2x'" *ngIf="restaurant.types && restaurant.types.includes('food')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faGlassMartini" [size]="'2x'" *ngIf="restaurant.types && restaurant.types.includes('restaurant')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faGlassMartini" [size]="'2x'" *ngIf="restaurant.types && restaurant.types.includes('establishment')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faGlassMartini" [size]="'2x'" *ngIf="restaurant.types && restaurant.types.includes('point-of-interest')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>-->
+
+          <fa-icon [icon]="faBeer" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('bar')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faGlassMartini" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('night_club')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faTruckMoving" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('shopping-cart')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faTruckMoving" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('meal_delivery')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faCoffee" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('cafe')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faGamepad" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('bowling_alley')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faBirthdayCake" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('bakery')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faShoppingCart" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('store')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+          <fa-icon [icon]="faShoppingCart" [size]="'2x'"
+                   *ngIf="restaurant.types && restaurant.types.includes('home_goods_store')"
+                   [styles]="{color:'#F36F24'}"></fa-icon>
+        </div>
+      </div>
+
+      <cfs-photos *ngIf="(restaurant && restaurant.place)" [photos]="restaurant.place.photos"></cfs-photos>
+      <cfs-reviews *ngIf="(restaurant && restaurant.place)" [reviews]="restaurant.place.reviews"></cfs-reviews>
+
+      <div class="d-flex" style="align-items: stretch;">
+        <button class="btn btn-success m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">More details</button>
+        <button class="btn btn-warning m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Order</button>
+        <button class="btn btn-failure m-2" (click)="getGoogleMapPhotos(restaurant.googlePlaceId, i)">Call</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<ng-template #restRating let-fill="fill">
+  <span class="star" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill">&#9734;</span>&#9733;
+  </span>
+</ng-template>

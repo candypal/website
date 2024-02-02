@@ -1,5 +1,12 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
+
+
+export interface NavbarToggleExternalContent {
+  header?: string;
+  content?: string;
+  style?: Object | any;
+}
 
 export interface Link {
   label: string;
@@ -42,6 +49,7 @@ export interface Brand {
 }
 
 export interface Header {
+  navbarToggleExternalContent?: NavbarToggleExternalContent;
   brand?: Brand;
   links?: {
     leftLinks?: Array<Link>;

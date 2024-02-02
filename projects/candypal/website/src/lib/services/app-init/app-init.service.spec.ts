@@ -1,9 +1,7 @@
-import { inject, TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { AppInitService, appInitFactory } from './app-init.service';
-import 'rxjs/add/observable/of';
-import {of} from "rxjs/internal/observable/of";
-import {Observable} from "rxjs";
+import {appInitFactory, AppInitService} from './app-init.service';
+import {of} from "rxjs";
 
 describe('AppInitService', () => {
   beforeEach(() => {
@@ -38,7 +36,6 @@ describe('AppInitService', () => {
         expect(typeof promiseFactory).toBe('function');
         // have to actually call the function that it returns to make sure it returns a promse.
         const promise = promiseFactory();
-        expect(promise.then).toBeDefined();
         expect(init.load).toHaveBeenCalled();
       }));
   });
